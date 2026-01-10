@@ -1,4 +1,5 @@
 import os
+import json
 from datetime import datetime, timedelta
 from typing import List, Dict, Any
 
@@ -7,35 +8,70 @@ from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from configurations.config import GMAIL_TOKEN_PATH
 
-SCOPES = [
-    'https://www.googleapis.com/auth/gmail.readonly',
-    'https://www.googleapis.com/auth/gmail.modify'
-]
-TOKEN_PATH = GMAIL_TOKEN_PATH
+# =========================
+# CONFIG
+# =========================
 
+SCOPES = [
+    "https://www.googleapis.com/auth/gmail.readonly",
+    "https://www.googleapis.com/auth/gmail.modify",
+]
+
+TOKEN_PATH = "token.json"
+
+
+# =========================
+# HELPERS
+# =========================
+
+def ensure_token_file() -> None:
+    """
+    Ensure token.json exists on disk.
+    Writes it from GMAIL_TOKEN_JSON env var if missing.
+    """
+    token_json = os.getenv("GMAIL_TOKEN_JSON")
+
+    if not token_json:
+        raise RuntimeError("❌ GMAIL_TOKEN_JSON env var is missing")
+
+    if not os.path.exists(TOKEN_PATH):
+        with open(TOKEN_PATH, "w") as f:
+            f.write(token_json)
+        print("✅ token.json written from environment")
+
+
+# =========================
+# ACCESS TOKEN
+# =========================
 
 def get_access_token() -> str:
-    """Return a valid Gmail API access token using refresh token if needed."""
-    print("🔐 Checking for existing credentials...")
-    creds = None
-    if os.path.exists(TOKEN_PATH):
-        creds = Credentials.from_authorized_user_file(TOKEN_PATH, SCOPES)
-        print("✅ Loaded credentials from token.json")
-    else:
-        print("⚠️ token.json not found. Please run OAuth flow manually once.")
+    """
+    Returns a valid Gmail API access token.
+    Automatically refreshes and persists token.json if expired.
+    """
+    print("🔐 Checking Gmail OAuth credentials...")
 
-    if not creds or not creds.valid:
-        print("🔄 Credentials invalid or expired.")
-        if creds and creds.expired and creds.refresh_token:
-            print("♻️ Refreshing access token using refresh token...")
+    ensure_token_file()
+
+    creds = Credentials.from_authorized_user_file(TOKEN_PATH, SCOPES)
+    print("✅ Credentials loaded from token.json")
+
+    if not creds.valid:
+        print("🔄 Credentials invalid or expired")
+
+        if creds.expired and creds.refresh_token:
+            print("♻️ Refreshing access token...")
             creds.refresh(Request())
-            with open(TOKEN_PATH, 'w') as f:
+
+            with open(TOKEN_PATH, "w") as f:
                 f.write(creds.to_json())
-            print("✅ Token refreshed and saved.")
+
+            print("✅ Token refreshed and saved")
         else:
-            raise Exception("Run OAuth flow first using the googleapiclient method.")
-    else:
-        print("✅ Credentials are valid.")
+            raise RuntimeError(
+                "❌ Gmail OAuth token invalid and cannot be refreshed. "
+                "Run OAuth flow manually again."
+            )
 
     return creds.token
 
@@ -244,5 +280,6 @@ if __name__ == "__main__":
         print(f"Subject: {e['subject']}")
         print(f"Date   : {e['date']}")
         print(f"Body   : {e['body'][:300]}...")
+
 
 
