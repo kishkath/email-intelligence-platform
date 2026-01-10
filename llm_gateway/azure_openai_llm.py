@@ -1,18 +1,16 @@
-import os
-from dotenv import load_dotenv
-
-from langchain_openai import ChatOpenAI
 from langchain_core.messages import HumanMessage, SystemMessage
+from langchain_openai import ChatOpenAI
 
-load_dotenv()
+from configurations.config import MODEL_NAME, OPENAI_API_KEY
+
 
 def classify_with_llm(prompt: str) -> str:
     """Classify an email using OpenAI via LangChain (latest)."""
 
     llm = ChatOpenAI(
-        model=os.getenv("LLM_MODEL_NAME", "gpt-4o-mini"),
-        temperature=float(os.getenv("LLM_TEMPERATURE", 0.0)),
-        api_key=os.getenv("OPENAI_API_KEY"),
+        model=MODEL_NAME,
+        temperature=0,
+        api_key=OPENAI_API_KEY,
     )
 
     messages = [
