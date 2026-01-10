@@ -67,11 +67,17 @@ jobs:
 
       # -------------------------------------------------
       # 4️⃣ Restore Gmail OAuth files
-      # -------------------------------------------------
+      # # -------------------------------------------------
+      # - name: Restore Gmail OAuth files
+      #   run: |
+      #     echo '${{ secrets.GMAIL_CREDENTIALS_JSON }}' > credentials.json
+      #     echo '${{ secrets.GMAIL_TOKEN_JSON }}' > token.json
+
       - name: Restore Gmail OAuth files
         run: |
-          echo '${{ secrets.GMAIL_CREDENTIALS_JSON }}' > credentials.json
-          echo '${{ secrets.GMAIL_TOKEN_JSON }}' > token.json
+          printf "%s" "${{ secrets.GMAIL_CREDENTIALS_JSON }}" > credentials.json
+          printf "%s" "${{ secrets.GMAIL_TOKEN_JSON }}" > token.json
+
 
       # -------------------------------------------------
       # 5️⃣ Run Email Pipeline
