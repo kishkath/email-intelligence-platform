@@ -6,7 +6,7 @@ from typing import List, Dict, Any
 import requests
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
-from configurations.config import GMAIL_TOKEN_PATH
+from configurations.config import GMAIL_TOKEN_PATH, GMAIL_TOKEN_JSON
 
 # =========================
 # CONFIG
@@ -29,7 +29,7 @@ def ensure_token_file() -> None:
     Ensure token.json exists on disk.
     Writes it from GMAIL_TOKEN_JSON env var if missing.
     """
-    token_json = os.getenv("GMAIL_TOKEN_JSON")
+    token_json = GMAIL_TOKEN_JSON
 
     if not token_json:
         raise RuntimeError("❌ GMAIL_TOKEN_JSON env var is missing")
@@ -280,6 +280,7 @@ if __name__ == "__main__":
         print(f"Subject: {e['subject']}")
         print(f"Date   : {e['date']}")
         print(f"Body   : {e['body'][:300]}...")
+
 
 
 
