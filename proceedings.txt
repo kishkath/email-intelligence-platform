@@ -1,0 +1,26 @@
+1. Collecting Tech Stack.
+ Backend: Python, FastAPI, SQLITE, ChromaDb
+ Frontend: Yet to be determined.
+ Extra: Twillio (for sending messsages to whatsapp), bitly (to shorten email links, so that user can open when he needs available at the end of message)
+
+
+BASIC PLAN v0: NOV-1
+----------------------------------------------------------------
+| Stage  | Deliverable                                         |
+| ------ | --------------------------------------------------- |
+| Step 1 | Project environment, Gmail & Twilio setup           |: Done (Twillio is pending, as its from 4th step)
+| Step 2 | Email ingestion working                             |: Done
+| Step 3 | LLM classifier returning structured JSON            |: Done (As a basic app, Python based classifier with key-words as LLM might cost/take time to implement)
+| Step 4 | Priority-based notification logic working           |: Done (Only high priority are made to notify)
+| Step 5 | Notification templates and rate limiting integrated |: Done
+| Step 6 | LLM Integration for better classification           |: Done
+| Step 7 | Implemented priority-based (High, Low)              |: Done
+| Step 8 | Front-end Integration and testing                   |
+| Step 8 | End-to-end deployment and testing                   |
+| step 9 | Smart replies, (user can reply via whatsapp,        |
+|        |                         it goes and sends to sender)|
+| Step 10| Improvisations w.r.t robust app                     |
+| Step 11| Multiple Email Integrations
+
+FURTHER IDEAS:
+1. button for un-subscribing
