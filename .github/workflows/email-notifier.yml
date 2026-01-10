@@ -1,0 +1,70 @@
+name: Email Intelligence Pipeline
+
+on:
+  # Run every 4 hours
+  schedule:
+    - cron: "0 */4 * * *"
+
+  # Allow manual trigger from GitHub UI
+  workflow_dispatch:
+
+jobs:
+  run-email-pipeline:
+    runs-on: ubuntu-latest
+
+    steps:
+      # --------------------------------------------------
+      # 1️⃣ Checkout repository
+      # --------------------------------------------------
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # --------------------------------------------------
+      # 2️⃣ Set up Python
+      # --------------------------------------------------
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      # --------------------------------------------------
+      # 3️⃣ Install dependencies
+      # --------------------------------------------------
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      # --------------------------------------------------
+      # 4️⃣ Run Email Pipeline
+      # --------------------------------------------------
+      - name: Run email ingestion pipeline
+        env:
+          # ---------------- Gmail ----------------
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
+          GMAIL_USER: ${{ secrets.GMAIL_USER }}
+
+          # ---------------- Twilio ----------------
+          TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
+          TWILIO_AUTH_TOKEN: ${{ secrets.TWILIO_AUTH_TOKEN }}
+          TWILIO_WHATSAPP_FROM: ${{ secrets.TWILIO_WHATSAPP_FROM }}
+          TWILIO_WHATSAPP_TO: ${{ secrets.TWILIO_WHATSAPP_TO }}
+
+          # ---------------- App ----------------
+          TIMEZONE: Asia/Kolkata
+
+        run: |
+          echo "🚀 Starting Email Intelligence Pipeline"
+          python -c "
+          import requests
+          response = requests.post(
+              'http://127.0.0.1:1212/run-pipeline',
+              json={
+                  'start_date': '01-01-2025',
+                  'end_date': '31-12-2025',
+                  'limit': 5,
+                  'unread': False
+              }
+          )
+          print(response.status_code, response.text)
+          "
