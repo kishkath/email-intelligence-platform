@@ -15,6 +15,7 @@ GMAIL_CREDENTIALS_FILE = os.getenv("GMAIL_CREDENTIALS_FILE", "credentials.json")
 GMAIL_TOKEN_FILE = os.getenv("GMAIL_TOKEN_FILE", "token.json")
 GMAIL_USER = os.getenv("GMAIL_USER")
 GMAIL_TOKEN_PATH = os.getenv("GMAIL_TOKEN_PATH")
+GMAIL_TOKEN_JSON = os.getenv("GMAIL_TOKEN_JSON")
 
 # Twilio / WhatsApp
 TWILIO_ACCOUNT_SID = os.getenv("TWILIO_ACCOUNT_SID")
@@ -32,4 +33,5 @@ MODEL_PROVIDER = os.getenv("MODEL_PROVIDER", "openai")
 TIMEZONE = os.getenv("TIMEZONE", "Asia/Kolkata")
 BATCH_SEND_HOUR = int(os.getenv("BATCH_SEND_HOUR", 20))
 WEEKLY_SEND_DAY = os.getenv("WEEKLY_SEND_DAY", "Sunday")
+
 
