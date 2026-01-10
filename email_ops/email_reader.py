@@ -5,12 +5,13 @@ from typing import List, Dict, Any
 import requests
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
+from configurations.config import GMAIL_TOKEN_PATH
 
 SCOPES = [
     'https://www.googleapis.com/auth/gmail.readonly',
     'https://www.googleapis.com/auth/gmail.modify'
 ]
-TOKEN_PATH = r"C:\Users\saikir\learnings\tmlc\week4_email_notifying_agent\email_ops\token.json"
+TOKEN_PATH = GMAIL_TOKEN_PATH
 
 
 def get_access_token() -> str:
@@ -243,4 +244,5 @@ if __name__ == "__main__":
         print(f"Subject: {e['subject']}")
         print(f"Date   : {e['date']}")
         print(f"Body   : {e['body'][:300]}...")
+
 
