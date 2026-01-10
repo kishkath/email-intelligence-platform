@@ -3,8 +3,8 @@ name: Email Priority Notifier Pipeline
 on:
   schedule:
     # Runs every 4 hours
-    - cron: "0 */48 * * *"
-  workflow_dispatch: # Allows manual trigger from GitHub UI
+    - cron: "0 */4 * * *"
+  workflow_dispatch:
 
 jobs:
   run-email-pipeline:
@@ -15,9 +15,9 @@ jobs:
       # Gmail / Google
       # ===============================
       GOOGLE_PROJECT_ID: ${{ secrets.GOOGLE_PROJECT_ID }}
-      GOOGLE_CREDENTIALS_PATH: credentials.json
       GMAIL_CREDENTIALS_FILE: credentials.json
       GMAIL_TOKEN_FILE: token.json
+      GMAIL_USER: ${{ secrets.GMAIL_USER }}
 
       # ===============================
       # Twilio / WhatsApp
@@ -28,10 +28,19 @@ jobs:
       TWILIO_WHATSAPP_TO: ${{ secrets.TWILIO_WHATSAPP_TO }}
 
       # ===============================
-      # Optional (future use)
+      # Optional Integrations
       # ===============================
       BITLY_ACCESS_TOKEN: ${{ secrets.BITLY_ACCESS_TOKEN }}
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+
+      # ===============================
+      # System / App Config
+      # ===============================
+      TIMEZONE: Asia/Kolkata
+      BATCH_SEND_HOUR: "20"
+      WEEKLY_SEND_DAY: Sunday
+      MODEL_NAME: gpt-4o-mini
+      MODEL_PROVIDER: openai
 
     steps:
       # -------------------------------------------------
@@ -59,10 +68,10 @@ jobs:
       # -------------------------------------------------
       # 4️⃣ Restore Gmail OAuth files
       # -------------------------------------------------
-      - name: Restore Gmail credentials
+      - name: Restore Gmail OAuth files
         run: |
-          echo "${{ secrets.GMAIL_CREDENTIALS_JSON }}" > credentials.json
-          echo "${{ secrets.GMAIL_TOKEN_JSON }}" > token.json
+          echo '${{ secrets.GMAIL_CREDENTIALS_JSON }}' > credentials.json
+          echo '${{ secrets.GMAIL_TOKEN_JSON }}' > token.json
 
       # -------------------------------------------------
       # 5️⃣ Run Email Pipeline
@@ -74,7 +83,7 @@ jobs:
           echo "✅ Email pipeline completed"
 
       # -------------------------------------------------
-      # 6️⃣ Upload SQLite DB (optional but useful)
+      # 6️⃣ Upload SQLite DB (debugging only)
       # -------------------------------------------------
       - name: Upload SQLite database artifact
         if: always()
