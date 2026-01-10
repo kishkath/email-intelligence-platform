@@ -1,0 +1,31 @@
+{
+  "high_priority": {
+    "job_related": [
+      "job", "application", "resume", "cv", "hiring", "recruiter", "interview",
+      "offer letter", "shortlisted", "candidate", "career opportunity"
+    ],
+    "work_projects": [
+      "LangGraph", "LangChain", "LangSmith", "Deep Agents",
+      "project update", "deadline", "deployment", "deliverable",
+      "client", "stakeholder", "production issue"
+    ],
+    "technical_roles": [
+      "machine learning engineer", "deep learning engineer", "python developer",
+      "data scientist", "ai engineer", "software developer", "backend engineer",
+      "full stack", "fastapi", "azure", "openai", "mlops"
+    ],
+    "financial": [
+      "invoice", "payment due", "salary", "payout", "credit note",
+      "reimbursement", "bank statement", "investment", "mutual fund"
+    ],
+    "urgent": [
+      "urgent", "asap", "immediate action", "respond quickly", "important update",
+      "critical", "attention required", "review needed"
+    ]
+  },
+  "low_priority": [
+    "newsletter", "promo", "discount", "unsubscribe", "sale", "offer", "coupon",
+    "survey", "social", "community", "digest", "event invite", "follow us"
+  ],
+  "threshold": 2
+}
