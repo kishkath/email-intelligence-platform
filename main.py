@@ -17,8 +17,8 @@ init_db()
 
 
 async def run_pipeline(
-    hours_back: int = 48,
-    limit: int = 4,
+    hours_back: int = 24,
+    limit: int = 10,
     unread: bool = True,
 ):
     """
