@@ -43,19 +43,43 @@ async def run_pipeline(
         start_time = end_time - timedelta(hours=hours_back)
 
         # Gmail reader expects dd-mm-yyyy
-        start_date = start_time.strftime("%d-%m-%Y")
-        end_date = end_time.strftime("%d-%m-%Y")
+        # start_date = start_time.strftime("%d-%m-%Y")
+        # end_date = end_time.strftime("%d-%m-%Y")
 
+        # print(f"[TIME] Window: last {hours_back} hours")
+        # print(f"[TIME] Start: {start_time.isoformat()} UTC")
+        # print(f"[TIME] End  : {end_time.isoformat()} UTC")
+
+        
+        # Gmail works on DAY granularity and is EXCLUSIVE.
+        # To avoid missing latest emails, extend end_date by +1 day.
+        gmail_start_date = start_time.strftime("%d-%m-%Y")
+        gmail_end_date = (end_time + timedelta(days=1)).strftime("%d-%m-%Y")
+        
         print(f"[TIME] Window: last {hours_back} hours")
-        print(f"[TIME] Start: {start_time.isoformat()} UTC")
-        print(f"[TIME] End  : {end_time.isoformat()} UTC")
+        print(f"[TIME] Start (UTC): {start_time.isoformat()}")
+        print(f"[TIME] End   (UTC): {end_time.isoformat()}")
+        print(f"[TIME] Gmail after : {gmail_start_date}")
+        print(f"[TIME] Gmail before: {gmail_end_date}")
+        
+        # -------------------------------------------------
+        # # 1️⃣ Fetch Emails
+        # # -------------------------------------------------
+        # if unread:
+        #     print("[STEP 1] Fetching UNREAD emails...")
+        #     emails = read_unread_emails(
+        #         start_date=gmail_start_date,
+        #         end_date=gmail_end_date,
+        #         limit=limit,
+        #     )
+
 
         # -------------------------------------------------
         # 1️⃣ Fetch Emails
         # -------------------------------------------------
         if unread:
             print("[STEP 1] Fetching UNREAD emails...")
-            emails = read_unread_emails(start_date, end_date, limit)
+            emails = read_unread_emails(gmail_start_date, gmail_end_date, limit)
         else:
             print("[STEP 1] Fetching READ emails...")
             emails = read_read_emails(start_date, end_date, limit)
