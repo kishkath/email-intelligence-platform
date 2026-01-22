@@ -154,13 +154,22 @@ def parse_email_payload(payload):
 # =========================================================
 def compute_date_range(hours_back: int):
     """Compute Gmail-compatible date range for last N hours."""
-    end_time = datetime.utcnow()
-    start_time = end_time - timedelta(hours=hours_back)
+    now_utc = datetime.utcnow()
+
+    after_date = (now_utc - timedelta(hours=hours_back)).date()
+    before_date = (now_utc + timedelta(days=1)).date()  # 👈 critical fix
 
     return (
-        start_time.strftime("%Y/%m/%d"),
-        end_time.strftime("%Y/%m/%d"),
+        after_date.strftime("%Y/%m/%d"),
+        before_date.strftime("%Y/%m/%d"),
     )
+    # end_time = datetime.utcnow()
+    # start_time = end_time - timedelta(hours=hours_back)
+
+    # return (
+    #     start_time.strftime("%Y/%m/%d"),
+    #     end_time.strftime("%Y/%m/%d"),
+    # )
 
 
 # =========================================================
@@ -280,6 +289,7 @@ if __name__ == "__main__":
         print(f"Subject: {e['subject']}")
         print(f"Date   : {e['date']}")
         print(f"Body   : {e['body'][:300]}...")
+
 
 
 
