@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 # Load .env file
 load_dotenv()
 
-CLASSIFICATION_MODE = "python" # llm
+CLASSIFICATION_MODE = "llm" # llm
 
 
 # Gmail / Google Cloud API
@@ -33,5 +33,6 @@ MODEL_PROVIDER = os.getenv("MODEL_PROVIDER", "openai")
 TIMEZONE = os.getenv("TIMEZONE", "Asia/Kolkata")
 BATCH_SEND_HOUR = int(os.getenv("BATCH_SEND_HOUR", 20))
 WEEKLY_SEND_DAY = os.getenv("WEEKLY_SEND_DAY", "Sunday")
+
 
 
